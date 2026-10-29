@@ -1,0 +1,3 @@
+conf=0.39 IoU0.5: P=0.6966 R=0.8139 F1=0.7507 (tp 3017, pred 4331, human 3707, frames 1290)
+conf=0.39 IoU0.75: P=0.6428 R=0.751 F1=0.6927 (tp 2784, pred 4331, human 3707, frames 1290)
+b1-cuda train+predict seconds: 3661; sha256: 3d5bb6dfae6af678e194976d43b0ab458fd22e6b1513b71207fad873a25ca088

@@ -1,0 +1,137 @@
+{
+  "frames": "data/test_frames.json",
+  "subset": "data/test300_canvases.json",
+  "size_bounds": [
+    0.06514,
+    0.18505
+  ],
+  "min_side": 0,
+  "conditions": {
+    "a1": {
+      "pred": "predictions/test-pred/a1",
+      "conf": 0.05,
+      "classes": [
+        3
+      ]
+    },
+    "b0": {
+      "pred": "predictions/test-pred/b0-yolov5x",
+      "conf": 0.52
+    },
+    "b1": {
+      "pred": "predictions/test-pred/b1-yolo11s",
+      "conf": 0.31
+    },
+    "b1-seed1": {
+      "pred": "predictions/test-pred/b1-seed1",
+      "conf": 0.44
+    },
+    "b1-seed2": {
+      "pred": "predictions/test-pred/b1-seed2",
+      "conf": 0.41
+    },
+    "b1-cuda": {
+      "pred": "predictions/test-pred/b1-cuda",
+      "conf": 0.39
+    },
+    "b2": {
+      "pred": "predictions/test-pred/b2-rtdetr-l",
+      "conf": 0.69
+    },
+    "lc-5": {
+      "pred": "predictions/test-pred/lc-5",
+      "conf": 0.4
+    },
+    "lc-10": {
+      "pred": "predictions/test-pred/lc-10",
+      "conf": 0.34
+    },
+    "lc-19": {
+      "pred": "predictions/test-pred/lc-19",
+      "conf": 0.44
+    },
+    "c": {
+      "pred": "predictions/test-pred/c",
+      "conf": 0.46
+    },
+    "a2": {
+      "pred": "predictions/test-pred/a2",
+      "conf": 0.0,
+      "no_score": true
+    }
+  },
+  "pairs": [
+    [
+      "c",
+      "b0"
+    ],
+    [
+      "c",
+      "b1"
+    ],
+    [
+      "c",
+      "b2"
+    ],
+    [
+      "b2",
+      "b1"
+    ],
+    [
+      "b1",
+      "b0"
+    ],
+    [
+      "b2",
+      "b0"
+    ],
+    [
+      "b1",
+      "a1"
+    ],
+    [
+      "b1",
+      "lc-19"
+    ],
+    [
+      "b1",
+      "lc-10"
+    ],
+    [
+      "b1",
+      "lc-5"
+    ],
+    [
+      "lc-19",
+      "lc-10"
+    ],
+    [
+      "lc-10",
+      "lc-5"
+    ],
+    [
+      "b1",
+      "b1-cuda"
+    ],
+    [
+      "b1-cuda",
+      "b1-seed1"
+    ],
+    [
+      "b1-cuda",
+      "b1-seed2"
+    ],
+    [
+      "b1",
+      "a2"
+    ],
+    [
+      "b2",
+      "a2"
+    ],
+    [
+      "a2",
+      "a1"
+    ]
+  ]
+}

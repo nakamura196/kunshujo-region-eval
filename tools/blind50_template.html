@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>捃拾帖 50件の判定</title>
+<style>
+:root { --bg:#f6f5f2; --fg:#1d1d1f; --muted:#666; --card:#fff; --line:#ddd; --red:#d00; --blue:#1e5aff; --orange:#e07800; --sel:#1d1d1f; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font: 16px/1.6 -apple-system, "Hiragino Sans", sans-serif; }
+header { position:sticky; top:0; z-index:5; background:var(--card); border-bottom:1px solid var(--line); padding:8px 16px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+header b { font-size:18px; }
+#bar { flex:1; min-width:160px; height:8px; background:#eee; border-radius:4px; overflow:hidden; }
+#bar i { display:block; height:100%; background:#2a2; width:0; }
+main { max-width:1500px; margin:0 auto; padding:12px 16px 40px; }
+.q { background:#fff3f3; border-left:6px solid var(--red); padding:10px 14px; margin-bottom:12px; font-size:18px; }
+.panels { display:grid; grid-template-columns: 1fr 1fr 260px; gap:12px; align-items:start; }
+@media (max-width: 1000px) { .panels { grid-template-columns: 1fr; } }
+.panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px; }
+.panel h3 { margin:0 0 6px; font-size:16px; }
+.panel img { width:100%; display:block; cursor:zoom-in; border-radius:4px; }
+.panel .cap { color:var(--muted); font-size:13px; margin-top:4px; }
+.crops { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:flex-end; }
+.crops figure { margin:0; text-align:center; font-size:12px; color:var(--muted); }
+.crops img { height:120px; width:auto; max-width:220px; object-fit:contain; border:4px solid; border-radius:3px; cursor:zoom-in; background:#eee; }
+.crops figure.tg img { border-width:6px; }
+.crops figure.tg figcaption { color:var(--red); font-weight:bold; }
+.h3h { color:var(--blue); } .h3m { color:var(--orange); }
+.choices { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:14px; }
+@media (max-width: 1000px) { .choices { grid-template-columns: 1fr; } }
+.choices button { text-align:left; background:var(--card); border:2px solid var(--line); border-radius:10px; padding:12px; font:inherit; cursor:pointer; }
+.choices button:hover { border-color:#999; }
+.choices button.on { border-color:var(--sel); background:#fffbe6; }
+.choices .k { display:inline-block; min-width:26px; height:26px; line-height:26px; text-align:center; border-radius:6px; background:#222; color:#fff; font-weight:bold; margin-right:6px; }
+.choices .t { font-weight:bold; font-size:17px; }
+.choices .d { display:block; color:#444; font-size:14px; margin-top:4px; }
+.row { display:flex; gap:10px; margin-top:12px; align-items:center; flex-wrap:wrap; }
+.row input { flex:1; min-width:200px; font:inherit; padding:8px; border:1px solid var(--line); border-radius:6px; }
+.row button, header button { font:inherit; padding:8px 14px; border-radius:6px; border:1px solid #999; background:#fff; cursor:pointer; }
+.help { color:var(--muted); font-size:13px; }
+#zoom { position:fixed; inset:0; background:#111; display:none; z-index:10; flex-direction:column; }
+#zoom .tb { display:flex; gap:8px; padding:8px 12px; background:#222; color:#eee; align-items:center; flex-wrap:wrap; }
+#zoom .tb button { font:inherit; padding:6px 12px; border-radius:6px; border:1px solid #666; background:#333; color:#eee; cursor:pointer; }
+#zoom .tb button.on { background:#eee; color:#111; }
+#zoom .tb .help { color:#aaa; }
+#osd { flex:1; }
+.ov { pointer-events:none; box-sizing:border-box; }
+#done { display:none; background:#eaffea; border:1px solid #9c9; padding:12px; border-radius:8px; margin-top:12px; }
+textarea { width:100%; height:140px; font: 12px monospace; }
+</style>
+</head>
+<body>
+<header>
+  <b id="pos"></b>
+  <div id="bar"><i></i></div>
+  <span id="cnt" class="help"></span>
+  <span id="fs" class="help"></span>
+  <button id="exp">結果を保存（TSV）</button>
+  <button id="copy">結果をコピー</button>
+</header>
+<main>
+  <div class="q" id="q"></div>
+  <div class="panels">
+    <div class="panel"><h3 class="h3h">人の枠（青系）</h3><img id="ih" alt="人の枠"><div class="cap" id="ch"></div><div class="crops" id="lh"></div></div>
+    <div class="panel"><h3 class="h3m">機械の枠（橙系）</h3><img id="im" alt="機械の枠"><div class="cap" id="cm"></div><div class="crops" id="lm"></div></div>
+    <div class="panel"><h3>コマ全体での位置</h3><img id="ip" alt="コマ全体"><div class="cap">赤＝判定する枠、灰色＝左の 2 枚に切り出した範囲</div></div>
+  </div>
+  <div class="choices" id="choices"></div>
+  <div class="row">
+    <button id="prev">← 前へ</button>
+    <input id="note" placeholder="メモ（任意。迷った点など）">
+    <button id="next">次へ →</button>
+  </div>
+  <p class="help">キー操作: 1〜4 で選ぶ（選ぶと次へ進みます）／ ← → で移動 ／ 画像をクリックすると元の画像を拡大して見られます（人・機械の枠を切り替え可）。判定はこのブラウザに自動で保存されます。終わったら「結果を保存」を押してください。</p>
+  <div id="done">50 件すべて判定しました。「結果を保存（TSV）」を押してファイルを保存するか、「結果をコピー」を押してチャットに貼ってください。<textarea id="tsv" readonly></textarea></div>
+</main>
+<div id="zoom">
+  <div class="tb">
+    <button data-m="human">H 人の枠</button>
+    <button data-m="machine">M 機械の枠</button>
+    <button data-m="both">B 両方</button>
+    <button data-m="none">N 枠なし</button>
+    <span class="help">マウスのホイールで拡大・ドラッグで移動。赤い太枠＝判定する枠。0 で最初の範囲に戻る</span>
+    <span style="flex:1"></span>
+    <button id="zclose">閉じる（Esc）</button>
+  </div>
+  <div id="osd"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
+<script>
+const DATA = /*DATA*/[];
+const KEY = 'kunshujo-blind50-v1';
+const BL = ['30,90,255', '0,160,220', '90,60,220', '0,110,160', '70,140,255'];
+const OR = ['255,140,0', '220,90,0', '255,190,0', '200,120,40', '255,100,60'];
+const LABELS = ['機械の誤り', '切り方の方針の違い', '正解側の誤り', '判断できない'];
+const DESC = {
+  machine: [
+    '機械の赤枠が、資料 1 点の範囲としておかしい。台紙の余白・帖の罫・資料の一部だけ・関係の無い複数の資料をまとめた、など。人の付け方のほうが正しい',
+    '人の付け方も機械の付け方も、資料の範囲として筋が通る。違いは、まとめるか分けるか・縁を含めるか、など',
+    '機械の赤枠は資料 1 点を正しく囲んでいる。人がその資料に枠を描き漏らしている',
+    '画像が小さい・暗いなどで決められない'
+  ],
+  human: [
+    '人の赤枠は資料 1 点を正しく囲んでいる。機械がそれを拾えていない（または大きくずれている）',
+    '人の付け方も機械の付け方も、資料の範囲として筋が通る。違いは、まとめるか分けるか・縁を含めるか、など',
+    '人の赤枠のほうがおかしい。位置のずれ・何も無い所・点のように小さい、など',
+    '画像が小さい・暗いなどで決められない'
+  ]
+};
+let st = {};
+try { st = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+const SERVER = 'http://127.0.0.1:8766/';
+function setFileStatus(ok) {
+  const el = document.getElementById('fs');
+  if (!el) return;
+  el.textContent = ok ? 'ファイルにも保存済み' : 'ファイル保存なし（保存係が止まっています）';
+  el.style.color = ok ? '#2a2' : '#d00';
+}
+function pushFile() {
+  fetch(SERVER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ state: st, tsv: tsv() }) })
+    .then(r => setFileStatus(r.ok)).catch(() => setFileStatus(false));
+}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} pushFile(); };
+let cur = 0;
+const firstOpen = DATA.findIndex(d => !(st[d.id] && st[d.id].c));
+if (firstOpen >= 0) cur = firstOpen;
+const $ = id => document.getElementById(id);
+
+function render() {
+  const d = DATA[cur], n = String(d.n).padStart(2, '0');
+  $('pos').textContent = `${d.n} / ${DATA.length}`;
+  const who = d.kind === 'machine' ? '機械' : '人';
+  const other = d.kind === 'machine' ? '人' : '機械';
+  $('q').innerHTML = `赤い太枠は <b>${who}だけが付けた枠</b> です。${other}の枠には、これと十分に重なるものがありません。<br>なぜ食い違ったのかを、下の 4 つから選んでください。`;
+  $('ih').src = `img/${n}-human.jpg`; $('im').src = `img/${n}-machine.jpg`; $('ip').src = `img/${n}-page.jpg`;
+  $('ch').textContent = d.kind === 'human' ? '赤い太枠＝判定する人の枠' : '赤いかぎ印（四隅）＝機械の赤枠がある場所。人の枠ではありません';
+  $('cm').textContent = d.kind === 'machine' ? '赤い太枠＝判定する機械の枠' : '赤いかぎ印（四隅）＝人の赤枠がある場所。機械の枠ではありません';
+  const s = st[d.id] || {};
+  $('choices').innerHTML = LABELS.map((l, k) =>
+    `<button data-k="${k}" class="${s.c === l ? 'on' : ''}"><span class="k">${k + 1}</span><span class="t">${l}</span><span class="d">${DESC[d.kind][k]}</span></button>`).join('');
+  $('choices').querySelectorAll('button').forEach(b => b.onclick = () => choose(+b.dataset.k));
+  $('lh').innerHTML = crops(d, 'human'); $('lm').innerHTML = crops(d, 'machine');
+  document.querySelectorAll('.crops img').forEach(im => im.onclick = () => zOpen(im.dataset.side));
+  $('note').value = s.note || '';
+  const done = DATA.filter(x => st[x.id] && st[x.id].c).length;
+  $('cnt').textContent = `判定済み ${done} 件`;
+  document.querySelector('#bar i').style.width = (100 * done / DATA.length) + '%';
+  $('done').style.display = done === DATA.length ? 'block' : 'none';
+  if (done === DATA.length) $('tsv').value = tsv();
+  window.scrollTo(0, 0);
+}
+// 切り出した範囲の中にある枠を、1 つずつ IIIF から切り抜いて並べる（判定する枠が先頭）
+function crops(d, side) {
+  const C = d.crop, cols = side === 'human' ? BL : OR;
+  const inC = b => b[0] < C[0] + C[2] && b[0] + b[2] > C[0] && b[1] < C[1] + C[3] && b[1] + b[3] > C[1];
+  const same = b => b.every((v, k) => Math.abs(v - d.target[k]) <= 1);
+  const list = d[side].map((b, k) => ({ b, k, t: d.kind === side && same(b) })).filter(o => inC(o.b));
+  list.sort((a, b) => b.t - a.t);
+  if (!list.length) return '<span class="help">この範囲には枠がありません</span>';
+  return list.map(o => {
+    const r = o.b.map(Math.round).join(',');
+    const col = o.t ? '230,0,0' : cols[o.k % cols.length];
+    return `<figure class="${o.t ? 'tg' : ''}"><img data-side="${side}" style="border-color:rgb(${col})" src="${d.service}/${r}/,240/0/default.jpg" loading="lazy" alt=""><figcaption>${o.t ? '判定する枠' : ''}</figcaption></figure>`;
+  }).join('');
+}
+function keepNote() { const d = DATA[cur]; st[d.id] = Object.assign(st[d.id] || {}, { note: $('note').value }); save(); }
+function choose(k) {
+  const d = DATA[cur];
+  st[d.id] = Object.assign(st[d.id] || {}, { c: LABELS[k], note: $('note').value, t: new Date().toISOString() });
+  save();
+  if (cur < DATA.length - 1) cur++;
+  render();
+}
+function go(dx) { keepNote(); cur = Math.min(DATA.length - 1, Math.max(0, cur + dx)); render(); }
+function tsv() {
+  return ['id\tkind\tauthor_blind_class\tnote\tdecided_at'].concat(DATA.map(d => {
+    const s = st[d.id] || {};
+    return [d.id, d.kind, s.c || '', (s.note || '').replace(/[\t\n]/g, ' '), s.t || ''].join('\t');
+  })).join('\n');
+}
+$('prev').onclick = () => go(-1);
+$('next').onclick = () => go(1);
+$('note').addEventListener('change', keepNote);
+$('exp').onclick = () => {
+  keepNote();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([tsv() + '\n'], { type: 'text/tab-separated-values' }));
+  a.download = 'author50_blind.tsv'; a.click();
+};
+$('copy').onclick = async () => {
+  keepNote();
+  try { await navigator.clipboard.writeText(tsv()); $('copy').textContent = 'コピーしました'; }
+  catch (e) { $('done').style.display = 'block'; $('tsv').value = tsv(); $('tsv').select(); }
+  setTimeout(() => $('copy').textContent = '結果をコピー', 2000);
+};
+// 元画像の拡大表示（IIIF をそのまま読む）。枠は人・機械を切り替えて重ねる
+let viewer = null, zMode = 'human', zItem = null;
+function zOpen(mode) {
+  zItem = DATA[cur]; zMode = mode;
+  $('zoom').style.display = 'flex';
+  if (!viewer) {
+    viewer = OpenSeadragon({ element: $('osd'), prefixUrl: 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/',
+      showNavigator: true, maxZoomPixelRatio: 3, gestureSettingsMouse: { clickToZoom: false } });
+    viewer.addHandler('open', () => { zFit(); zDraw(); });
+  }
+  viewer.open(zItem.service + '/info.json');
+}
+function rect(b) { return viewer.viewport.imageToViewportRectangle(b[0], b[1], b[2], b[3]); }
+function zFit() { viewer.viewport.fitBounds(rect(zItem.crop), true); }
+function addBox(b, rgb, w) {
+  const el = document.createElement('div');
+  el.className = 'ov';
+  el.style.border = `${w}px solid rgb(${rgb})`;
+  el.style.background = rgb === '230,0,0' ? 'transparent' : `rgba(${rgb},.15)`;
+  viewer.addOverlay({ element: el, location: rect(b) });
+}
+function zDraw() {
+  if (!viewer || !viewer.world.getItemCount()) return;
+  viewer.clearOverlays();
+  if (zMode === 'human' || zMode === 'both') zItem.human.forEach((b, k) => addBox(b, BL[k % BL.length], 3));
+  if (zMode === 'machine' || zMode === 'both') zItem.machine.forEach((b, k) => addBox(b, OR[k % OR.length], 3));
+  addBox(zItem.target, '230,0,0', 5);
+  document.querySelectorAll('#zoom .tb button[data-m]').forEach(b => b.classList.toggle('on', b.dataset.m === zMode));
+}
+function zClose() { $('zoom').style.display = 'none'; }
+document.querySelectorAll('#zoom .tb button[data-m]').forEach(b => b.onclick = () => { zMode = b.dataset.m; zDraw(); });
+$('zclose').onclick = zClose;
+$('ih').onclick = () => zOpen('human');
+$('im').onclick = () => zOpen('machine');
+$('ip').onclick = () => zOpen('both');
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if ($('zoom').style.display === 'flex') {
+    const m = { h: 'human', m: 'machine', b: 'both', n: 'none' }[e.key.toLowerCase()];
+    if (e.key === 'Escape') zClose(); else if (m) { zMode = m; zDraw(); } else if (e.key === '0') zFit();
+    return;
+  }
+  if (['1', '2', '3', '4'].includes(e.key)) choose(+e.key - 1);
+  else if (e.key === 'ArrowRight') go(1);
+  else if (e.key === 'ArrowLeft') go(-1);
+});
+// ファイル側の判定を読み、ブラウザに無いものを足す（ブラウザ側を優先）。その後、全件をファイルへ書き戻す
+fetch(SERVER).then(r => r.json()).then(j => {
+  for (const [k, v] of Object.entries(j.state || {})) if (!(st[k] && st[k].c)) st[k] = v;
+  render(); save();
+}).catch(() => { setFileStatus(false); render(); });
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+conf=0.52 IoU0.5: P=0.6982 R=0.7988 F1=0.7451 (tp 2961, pred 4241, human 3707, frames 1290)
+conf=0.52 IoU0.75: P=0.6392 R=0.7313 F1=0.6822 (tp 2711, pred 4241, human 3707, frames 1290)
+b0-yolov5x train+predict seconds: 5601; sha256: f544dfa38d1b03af840e8508fbdb7b99fbe52b3849b604a540106df3cff840c1

@@ -1,0 +1,3 @@
+conf=0.69 IoU0.5: P=0.7371 R=0.8033 F1=0.7688 (tp 2978, pred 4040, human 3707, frames 1290)
+conf=0.69 IoU0.75: P=0.6859 R=0.7475 F1=0.7154 (tp 2771, pred 4040, human 3707, frames 1290)
+b2-rtdetr-l train+predict seconds: 6644; sha256: 0e6fbb432e62e7fbda1865a25dfa63e59b4a2726a9c492cb2302e3be5ba918bf

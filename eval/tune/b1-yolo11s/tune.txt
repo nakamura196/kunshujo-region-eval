@@ -1,0 +1,3 @@
+conf=0.31 IoU0.5: P=0.6885 R=0.8384 F1=0.7561 (tp 3108, pred 4514, human 3707, frames 1290)
+conf=0.31 IoU0.75: P=0.6378 R=0.7766 F1=0.7004 (tp 2879, pred 4514, human 3707, frames 1290)
+b1-yolo11s train+predict seconds: 38819; sha256: 1f77f0c45c8dc747973b74e7ad08984fd075fc3121ff7a0c5350e93308c16343

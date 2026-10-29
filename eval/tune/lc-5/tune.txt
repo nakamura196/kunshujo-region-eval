@@ -1,0 +1,3 @@
+conf=0.4 IoU0.5: P=0.6474 R=0.6836 F1=0.665 (tp 2534, pred 3914, human 3707, frames 1290)
+conf=0.4 IoU0.75: P=0.5892 R=0.6221 F1=0.6052 (tp 2306, pred 3914, human 3707, frames 1290)
+lc-5 train+predict seconds: 6230; sha256: c58c65ae87cd8bfdb9022bc2ad010f73a830212db65120f277cc60308ffb603c

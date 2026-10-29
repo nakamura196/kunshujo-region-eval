@@ -1,0 +1,3 @@
+conf=0.41 IoU0.5: P=0.6911 R=0.8249 F1=0.7521 (tp 3058, pred 4425, human 3707, frames 1290)
+conf=0.41 IoU0.75: P=0.6382 R=0.7618 F1=0.6945 (tp 2824, pred 4425, human 3707, frames 1290)
+b1-seed2 train+predict seconds: 4304; sha256: 97defe4ef53cbd84c26dcfdb19f163aa1bde465c04dda515e2b1b349e5225982

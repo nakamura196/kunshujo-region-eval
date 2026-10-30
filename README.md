@@ -18,7 +18,8 @@ The human bounding boxes come from the public *Kunshūjō* catalog data of the U
 | `eval/tune/<condition>/` | Thresholds selected on the tuning volumes (`tune.txt`, with weight SHA-256) and tuning results |
 | `eval/test-eval/` | Evaluation configs and the test-set results (`summary.json`, `per-book.tsv`) reported in the paper |
 | `eval/public-weights-README.txt` | Source and SHA-256 of the public weights `best.pt` (condition `c`) |
-| `classify/PROMPT.md` | Pre-registered guideline for classifying disagreements |
+| `classify/PROMPT.md` | Guideline for classifying disagreements, fixed before the test volumes were scored (Japanese, as given to the models) |
+| `classify/PROMPT.en.md` | English translation of the guideline and a table matching its category names to those in the paper |
 | `classify/b1-test300/items.tsv` | The 300 sampled disagreements of `b1` (YOLO11s) |
 | `classify/b1-test300/pass1.jsonl`, `pass2.jsonl` | Labels from Pass 1 (Claude Opus) and Pass 2 (Claude Sonnet) |
 | `classify/b1-test300/gemini50.jsonl` | Labels from Gemini 4 Argon on the 50-item subset |
@@ -26,6 +27,7 @@ The human bounding boxes come from the public *Kunshūjō* catalog data of the U
 | `classify/b1-test300/author50_revised.tsv` | The author's labels after re-examining 3 items (`original` and `revised` columns) |
 | `classify/b1-test300/author50_nonblind.tsv` | An earlier check of the same 50 items made with the Pass 1 labels visible (not blind) |
 | `classify/b1-test300/neighbors13.tsv` | Neighbouring-frame check of the 13 apparent omissions (Section 4.4.4) |
+| `docs/fixed-in-advance.md` | What was fixed before scoring: the notebook entries, the values they record, and the commit dates (Section 3.1) |
 | `tools/` | All scripts used for splitting, training, inference, evaluation, sampling and classification |
 | Release assets `test-pred-*.tar.gz`, `empty-pred-*.tar.gz` | Per-frame predictions of every condition (not in git because of size) |
 

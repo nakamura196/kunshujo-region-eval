@@ -14,7 +14,7 @@ The human bounding boxes come from the public *Kunshūjō* catalog data of the U
 | `data/dev-tune.tsv`, `data/learning-curve-subsets.tsv` | Training/tuning split of the development volumes and the 5/10/19-volume subsets |
 | `data/test_frames.json` | The 5,937 test frames (5,929 after excluding click-error regions ≤ 10 px) |
 | `data/test300_canvases.json` | The 300-frame subset used for Qwen2.5-VL |
-| `data/regions.tsv`, `data/frame-coverage.tsv`, `data/library-collection.tsv` | Region list and frame coverage used in the ground-truth audit (Section 2) |
+| `data/regions.tsv`, `data/frame-coverage.tsv`, `data/library-collection.tsv` | Region list and frame coverage used in the audit of the human boxes (Section 2.5) |
 | `eval/tune/<condition>/` | Thresholds selected on the tuning volumes (`tune.txt`, with weight SHA-256) and tuning results |
 | `eval/test-eval/` | Evaluation configs and the test-set results (`summary.json`, `per-book.tsv`) reported in the paper |
 | `eval/public-weights-README.txt` | Source and SHA-256 of the public weights `best.pt` (condition `c`) |
@@ -26,7 +26,7 @@ The human bounding boxes come from the public *Kunshūjō* catalog data of the U
 | `classify/b1-test300/author50_blind.original.tsv` | The author's first labels on the 50 items, made without seeing model labels (primary) |
 | `classify/b1-test300/author50_revised.tsv` | The author's labels after re-examining 3 items (`original` and `revised` columns) |
 | `classify/b1-test300/author50_nonblind.tsv` | An earlier check of the same 50 items made with the Pass 1 labels visible (not blind) |
-| `classify/b1-test300/neighbors13.tsv` | Neighbouring-frame check of the 13 apparent omissions (Section 4.4.4) |
+| `classify/b1-test300/neighbors13.tsv` | Neighbouring-frame check of the 13 apparent omissions (Section 5.2) |
 | `docs/fixed-in-advance.md` | What was fixed before scoring: the notebook entries, the values they record, and the commit dates (Section 3.1) |
 | `tools/` | All scripts used for splitting, training, inference, evaluation, sampling and classification |
 | Release assets `test-pred-*.tar.gz`, `empty-pred-*.tar.gz` | Per-frame predictions of every condition (not in git because of size) |
@@ -46,7 +46,7 @@ Run the commands from the repository root. Some scripts still carry default path
 
 `data/test_frames.json` and `data/test300_canvases.json` were regenerated on 2026-10-29 because the original files were lost (`tools/make_frames.py` with the IIIF manifests; the 300-frame list from the Qwen2.5-VL predictions). With them, all F1 values and bootstrap intervals in `eval/test-eval/` were reproduced exactly; AP values differed by at most 0.0001.
 
-Counting human boxes that contain two or more machine boxes and the reverse (Section 4.4.3):
+Counting human boxes that contain two or more machine boxes and the reverse (Section 4.2):
 
 ```
 python3 -I tools/granularity.py --index <index.json> --pred predictions/test-pred/b1-yolo11s

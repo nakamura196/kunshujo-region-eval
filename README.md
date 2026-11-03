@@ -28,6 +28,7 @@ The human bounding boxes come from the public *Kunshūjō* catalog data of the U
 | `classify/b1-test300/author50_nonblind.tsv` | An earlier check of the same 50 items made with the Pass 1 labels visible (not blind) |
 | `classify/b1-test300/neighbors13.tsv` | Neighbouring-frame check of the 13 apparent omissions (Section 5.2) |
 | `docs/fixed-in-advance.md` | What was fixed before scoring: the notebook entries, the values they record, and the commit dates (Section 3.1) |
+| `external/` | Human boxes, predictions, config and results for the two external scrapbooks (Section 4.4; see `external/README.md`) |
 | `tools/` | All scripts used for splitting, training, inference, evaluation, sampling and classification |
 | Release assets `test-pred-*.tar.gz`, `empty-pred-*.tar.gz` | Per-frame predictions of every condition (not in git because of size) |
 

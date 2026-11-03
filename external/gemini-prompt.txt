@@ -1,0 +1,13 @@
+Each image below is a page of a Japanese scrapbook album. Each separate pasted paper item (a clipping, print, letter, card, document or sheet glued onto the album page) counts as one item. Do not include the album page itself, the binding, or empty background. If a pasted item is overlapped by another, still give one box per item. Detect all pasted paper items.
+
+Give each box as [x1, y1, x2, y2] (left, top, right, bottom), with coordinates normalized to the range 0-1000 relative to the image width and height (0,0 = top-left corner, 1000,1000 = bottom-right corner).
+
+Open each image file and look at it before answering. Do not open any other files. Work on each image independently.
+
+Answer with exactly one line of JSON per image, in this form and nothing else:
+{"image": <number>, "boxes": [{"bbox_2d": [x1, y1, x2, y2], "label": "paper"}, ...]}
+
+Images:
+- image=1 file: <path to image 1>
+- image=2 file: <path to image 2>
+...

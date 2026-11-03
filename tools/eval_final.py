@@ -130,6 +130,8 @@ def cmd_run(a):
             hum[can] = k
         frames = [f for f in frames if hum[f['canvas']]]
     b1, b2 = cfg['size_bounds']
+    # alt_empty: 人の枠のほかに「囲むものは無い」も正解とするコマの canvas（外の帖の 2026-11-02）。条件ごとに誤り（余分＋見落とし）の少ないほうの答えで数える。AP には効かない
+    alt_empty = set(cfg.get('alt_empty', []))
     conds = cfg['conditions']
     # コマごとの予測を読む。予測ファイルが無いコマは、どの条件でも欠けがあれば止める（同じコマで比べるため）
     pred = {}
@@ -157,6 +159,8 @@ def cmd_run(a):
             P = [p if len(p) > 4 else p + [1.0] for p in pred[cn][f['canvas']]]
             Pc = [p for p in P if p[4] >= conf]
             H = hum[f['canvas']]
+            if f['canvas'] in alt_empty and len(Pc) < len(Pc) + len(H) - 2 * len(match(Pc, H, 0.5)):
+                H = []  # どちらでもよいコマ: 「囲むものは無い」とした答えのほうが誤りが少なければ、そちらで数える
             cnt_diff.append(len(Pc) - len(H))
             for thr in (0.5, 0.75):
                 m = match(Pc, H, thr)

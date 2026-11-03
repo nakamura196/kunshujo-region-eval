@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>外の帖 枠描き</title>
+<style>
+  :root { --bg:#f4f4f2; --fg:#222; --muted:#666; --line:#ccc; --box:#0a6cff; --sel:#e8400c; }
+  * { box-sizing: border-box; }
+  html, body { height:100%; }
+  body { margin:0; font-family: "Hiragino Sans", sans-serif; background:var(--bg); color:var(--fg); display:flex; flex-direction:column; overflow:hidden; }
+  header { flex:none; background:#fff; border-bottom:1px solid var(--line); padding:8px 12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  header button, header select { font-size:14px; padding:4px 10px; }
+  #info { font-size:14px; }
+  #status { font-size:13px; color:var(--muted); margin-left:auto; }
+  #help { flex:none; font-size:13px; color:var(--muted); padding:4px 12px; background:#fff; border-bottom:1px solid var(--line); line-height:1.6; }
+  #help summary { cursor:pointer; }
+  #wrap { flex:1; min-height:0; overflow:auto; padding:8px; }
+  #wrap.pan { cursor:grab; }
+  #stage { position:relative; display:inline-block; user-select:none; }
+  #stage img { display:block; }
+  svg { position:absolute; left:0; top:0; }
+  polygon.b { fill:rgba(10,108,255,.08); stroke:var(--box); stroke-width:2; cursor:move; }
+  polygon.b.sel { stroke:var(--sel); fill:rgba(232,64,12,.10); stroke-width:3; }
+  circle.h { fill:#fff; stroke:var(--sel); stroke-width:2; cursor:crosshair; }
+  rect.draft { fill:none; stroke:var(--sel); stroke-dasharray:6 4; stroke-width:2; }
+  .done { color:#0a7a2a; font-weight:bold; }
+</style>
+</head>
+<body>
+<header>
+  <button id="prev">← 前</button>
+  <select id="jump"></select>
+  <button id="next">次 →</button>
+  <span id="info"></span>
+  <label><input type="checkbox" id="fin"> このコマは描き終えた</label>
+  <span>拡大</span><select id="zoom"><option value="1" selected>全体</option><option value="1.5">1.5 倍</option><option value="2">2 倍</option><option value="3">3 倍</option></select>
+  <button id="del">選んだ枠を消す (Delete)</button>
+  <button id="undo">元に戻す (⌘Z)</button>
+  <span id="status"></span>
+</header>
+<details id="help"><summary>描き方と操作（クリックで開く）</summary>
+  目録を作るつもりで、貼り込まれた資料を <b>1 点ずつ</b> 四角で囲んでください。まとめるか分けるかは、ご自身の判断でかまいません（迷った例は後で伺います）。
+  台紙・余白・綴じは囲みません。重なった紙片も 1 点ずつ囲みます。資料が 1 つも無いコマは、何も描かずに「描き終えた」に印を付けます。<br>
+  操作: 何も無い所をドラッグ＝新しい枠 ／ 枠をドラッグ＝移動 ／ 選んだ枠の四隅の白い丸＝その角だけを動かす（斜めの紙片は角を紙片の角に合わせる） ／ Delete＝消す ／ ← → キー＝前後のコマ。拡大したときは、スペースキーを押しながらドラッグ（またはトラックパッドの 2 本指）で画面を動かせます。描くたびに自動で保存されます。
+</details>
+<div id="wrap"><div id="stage"><img id="img" alt=""><svg id="svg"></svg></div></div>
+<script>
+// 枠は 4 点 [[x,y],[x,y],[x,y],[x,y]]（canvas 原寸）。古い [x,y,w,h] は読み込み時に 4 点へ直す。採点時に外接する四角へ直す
+let FR = [], BOX = {}, FIN = {}, cur = 0, sel = -1, hist = [], drag = null, space = false;
+const img = document.getElementById('img'), svg = document.getElementById('svg');
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const quad = b => Array.isArray(b[0]) ? b : [[b[0], b[1]], [b[0] + b[2], b[1]], [b[0] + b[2], b[1] + b[3]], [b[0], b[1] + b[3]]];
+
+async function init() {
+  FR = await (await fetch('frames.json')).json();
+  const s = await (await fetch('state')).json();
+  BOX = s.boxes || {}; FIN = s.finished || {};
+  for (const k in BOX) BOX[k] = BOX[k].map(quad);
+  FR.forEach((f, i) => { const o = document.createElement('option'); o.value = i; $('jump').appendChild(o); });
+  try { cur = Math.min(+localStorage.getItem('ext-cur') || 0, FR.length - 1); } catch (e) {}
+  show();
+}
+function labels() {
+  [...$('jump').options].forEach((o, i) => { const f = FR[i]; o.textContent = `${i + 1}. ${f.book_id}${FIN[f.key] ? ' ✓' : ''}`; });
+  const n = FR.filter(f => FIN[f.key]).length;
+  $('status').textContent = `描き終えたコマ ${n} / ${FR.length}`;
+}
+function scale() { return img.clientWidth / FR[cur].width; }
+function show() {
+  const f = FR[cur]; sel = -1; hist = [];
+  try { localStorage.setItem('ext-cur', cur); } catch (e) {}
+  $('jump').value = cur; $('fin').checked = !!FIN[f.key];
+  img.onload = () => { size(); draw(); };
+  img.src = f.service + '/full/2048,/0/default.jpg';
+  labels();
+}
+function size() {
+  const f = FR[cur], wr = $('wrap'), fit = Math.min((wr.clientWidth - 16) / f.width, (wr.clientHeight - 16) / f.height);
+  const w = f.width * fit * +$('zoom').value;
+  img.style.width = w + 'px';
+  svg.setAttribute('width', w); svg.setAttribute('height', w * f.height / f.width);
+}
+function el(tag, attrs) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+function draw(draft) {
+  svg.innerHTML = '';
+  const s = scale(), bs = BOX[FR[cur].key] || [];
+  bs.forEach((q, i) => {
+    const p = el('polygon', { points: q.map(([x, y]) => `${x * s},${y * s}`).join(' '), class: 'b' + (i === sel ? ' sel' : '') });
+    p.dataset.i = i; svg.appendChild(p);
+  });
+  if (sel >= 0 && bs[sel]) bs[sel].forEach(([x, y], j) => {
+    const h = el('circle', { cx: x * s, cy: y * s, r: 7, class: 'h' }); h.dataset.j = j; svg.appendChild(h);
+  });
+  if (draft) svg.appendChild(el('rect', { x: draft[0] * s, y: draft[1] * s, width: draft[2] * s, height: draft[3] * s, class: 'draft' }));
+  $('info').textContent = `${FR[cur].book_id}　枠 ${bs.length}`;
+}
+function pt(e) { const r = svg.getBoundingClientRect(), s = scale(); return [(e.clientX - r.left) / s, (e.clientY - r.top) / s]; }
+function clamp([x, y]) { const f = FR[cur]; return [Math.round(Math.min(Math.max(x, 0), f.width)), Math.round(Math.min(Math.max(y, 0), f.height))]; }
+function snap() { hist.push(JSON.stringify(BOX[FR[cur].key] || [])); if (hist.length > 100) hist.shift(); }
+svg.addEventListener('mousedown', e => {
+  const p = pt(e), k = FR[cur].key, t = e.target;
+  BOX[k] = BOX[k] || [];
+  if (space) { const wr = $('wrap'); drag = { mode: 'pan', x: e.clientX, y: e.clientY, sl: wr.scrollLeft, st: wr.scrollTop }; }
+  else if (t.classList.contains('h')) { snap(); drag = { mode: 'corner', j: +t.dataset.j }; }
+  else if (t.classList.contains('b')) { sel = +t.dataset.i; snap(); drag = { mode: 'move', p0: p, orig: BOX[k][sel].map(q => q.slice()) }; draw(); }
+  else { sel = -1; drag = { mode: 'new', p0: p }; }
+  e.preventDefault();
+});
+window.addEventListener('mousemove', e => {
+  if (!drag) return;
+  if (drag.mode === 'pan') { const wr = $('wrap'); wr.scrollLeft = drag.sl - (e.clientX - drag.x); wr.scrollTop = drag.st - (e.clientY - drag.y); return; }
+  const p = pt(e), bs = BOX[FR[cur].key];
+  if (drag.mode === 'new') draw([Math.min(drag.p0[0], p[0]), Math.min(drag.p0[1], p[1]), Math.abs(p[0] - drag.p0[0]), Math.abs(p[1] - drag.p0[1])]);
+  else if (drag.mode === 'move') { const dx = p[0] - drag.p0[0], dy = p[1] - drag.p0[1]; bs[sel] = drag.orig.map(([x, y]) => [x + dx, y + dy]); draw(); }
+  else { bs[sel][drag.j] = p; draw(); }
+});
+window.addEventListener('mouseup', e => {
+  if (!drag) return;
+  if (drag.mode === 'pan') { drag = null; return; }
+  const p = pt(e), k = FR[cur].key, bs = BOX[k];
+  if (drag.mode === 'new') {
+    const x1 = Math.min(drag.p0[0], p[0]), y1 = Math.min(drag.p0[1], p[1]), x2 = Math.max(drag.p0[0], p[0]), y2 = Math.max(drag.p0[1], p[1]);
+    if ((x2 - x1) * scale() > 6 && (y2 - y1) * scale() > 6) { snap(); bs.push([[x1, y1], [x2, y1], [x2, y2], [x1, y2]].map(clamp)); sel = bs.length - 1; }
+  } else if (bs[sel]) bs[sel] = bs[sel].map(clamp);
+  drag = null; draw(); save();
+});
+function save() {
+  $('status').textContent = '保存中…';
+  fetch('state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ boxes: BOX, finished: FIN }) })
+    .then(r => { if (!r.ok) throw 0; labels(); })
+    .catch(() => { $('status').textContent = '⚠ 保存できません（保存係が止まっています）'; });
+}
+function delSel() { const bs = BOX[FR[cur].key] || []; if (sel < 0 || !bs[sel]) return; snap(); bs.splice(sel, 1); sel = -1; draw(); save(); }
+function undo() { if (!hist.length) return; BOX[FR[cur].key] = JSON.parse(hist.pop()); sel = -1; draw(); save(); }
+function go(d) { const n = cur + d; if (n >= 0 && n < FR.length) { cur = n; show(); $('wrap').scrollTo(0, 0); } }
+$('prev').onclick = () => go(-1); $('next').onclick = () => go(1);
+$('jump').onchange = e => { cur = +e.target.value; show(); };
+$('zoom').onchange = () => { size(); draw(); };
+$('del').onclick = delSel; $('undo').onclick = undo;
+$('fin').onchange = e => { FIN[FR[cur].key] = e.target.checked; save(); };
+window.addEventListener('resize', () => { size(); draw(); });
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'SELECT') return;
+  if (e.key === ' ') { space = true; $('wrap').classList.add('pan'); e.preventDefault(); return; }
+  if (e.key === 'Delete' || e.key === 'Backspace') { delSel(); e.preventDefault(); }
+  else if ((e.metaKey || e.ctrlKey) && e.key === 'z') { undo(); e.preventDefault(); }
+  else if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1);
+});
+window.addEventListener('keyup', e => { if (e.key === ' ') { space = false; $('wrap').classList.remove('pan'); } });
+init();
+</script>
+</body>
+</html>

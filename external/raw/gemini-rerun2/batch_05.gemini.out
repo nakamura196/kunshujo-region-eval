@@ -1,0 +1,10 @@
+{"image": 1, "boxes": [{"bbox_2d": [154, 152, 860, 804], "label": "paper"}]}
+{"image": 2, "boxes": [{"bbox_2d": [121, 35, 438, 435], "label": "paper"}, {"bbox_2d": [82, 453, 470, 896], "label": "paper"}, {"bbox_2d": [591, 58, 858, 410], "label": "paper"}, {"bbox_2d": [569, 457, 878, 881], "label": "paper"}]}
+{"image": 3, "boxes": [{"bbox_2d": [245, 67, 841, 851], "label": "paper"}]}
+{"image": 4, "boxes": []}
+{"image": 5, "boxes": [{"bbox_2d": [101, 132, 912, 841], "label": "paper"}]}
+{"image": 6, "boxes": [{"bbox_2d": [103, 289, 405, 847], "label": "paper"}, {"bbox_2d": [522, 286, 827, 844], "label": "paper"}]}
+{"image": 7, "boxes": []}
+{"image": 8, "boxes": []}
+{"image": 9, "boxes": [{"bbox_2d": [57, 157, 859, 845], "label": "paper"}, {"bbox_2d": [909, 191, 1000, 532], "label": "paper"}]}
+{"image": 10, "boxes": [{"bbox_2d": [104, 164, 465, 846], "label": "paper"}, {"bbox_2d": [493, 206, 812, 806], "label": "paper"}]}

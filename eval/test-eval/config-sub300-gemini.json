@@ -1,0 +1,43 @@
+{
+ "frames": "data/test_frames.json",
+ "subset": "data/test300_canvases.json",
+ "size_bounds": [
+  0.06514,
+  0.18505
+ ],
+ "min_side": 10,
+ "conditions": {
+  "c": {
+   "pred": "predictions/test-pred/c",
+   "conf": 0.46
+  },
+  "b0": {
+   "pred": "predictions/test-pred/b0-yolov5x",
+   "conf": 0.52
+  },
+  "gemini": {
+   "pred": "gemini300/pred/run1",
+   "conf": 0.0,
+   "no_score": true
+  },
+  "gemini-run2": {
+   "pred": "gemini300/pred/run2",
+   "conf": 0.0,
+   "no_score": true
+  }
+ },
+ "pairs": [
+  [
+   "b0",
+   "gemini"
+  ],
+  [
+   "c",
+   "gemini"
+  ],
+  [
+   "gemini",
+   "gemini-run2"
+  ]
+ ]
+}

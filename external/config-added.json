@@ -1,0 +1,55 @@
+{
+ "frames": "external/frames-added.json",
+ "size_bounds": [
+  0.06514,
+  0.18505
+ ],
+ "min_side": 10,
+ "conditions": {
+  "c": {
+   "pred": "external/pred/c",
+   "conf": 0.46
+  },
+  "b0": {
+   "pred": "external/pred/b0-yolov5x",
+   "conf": 0.52
+  },
+  "gemini": {
+   "pred": "external/pred/gemini",
+   "conf": 0.0,
+   "no_score": true
+  },
+  "gemini-rerun1": {
+   "pred": "external/pred/gemini-rerun1",
+   "conf": 0.0,
+   "no_score": true
+  },
+  "gemini-rerun2": {
+   "pred": "external/pred/gemini-rerun2",
+   "conf": 0.0,
+   "no_score": true
+  }
+ },
+ "pairs": [
+  [
+   "c",
+   "gemini"
+  ],
+  [
+   "b0",
+   "gemini"
+  ],
+  [
+   "b0",
+   "c"
+  ],
+  [
+   "c",
+   "gemini-rerun1"
+  ],
+  [
+   "c",
+   "gemini-rerun2"
+  ]
+ ]
+}

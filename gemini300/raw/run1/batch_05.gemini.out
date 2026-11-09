@@ -1,0 +1,10 @@
+{"image": 1, "boxes": [{"bbox_2d": [128, 148, 539, 885], "label": "paper"}, {"bbox_2d": [539, 95, 935, 901], "label": "paper"}]}
+{"image": 2, "boxes": [{"bbox_2d": [165, 165, 526, 835], "label": "paper"}, {"bbox_2d": [523, 92, 918, 895], "label": "paper"}]}
+{"image": 3, "boxes": [{"bbox_2d": [121, 48, 494, 888], "label": "paper"}, {"bbox_2d": [531, 98, 925, 898], "label": "paper"}]}
+{"image": 4, "boxes": [{"bbox_2d": [119, 98, 535, 349], "label": "paper"}, {"bbox_2d": [116, 350, 531, 900], "label": "paper"}, {"bbox_2d": [531, 100, 903, 472], "label": "paper"}, {"bbox_2d": [529, 471, 706, 903], "label": "paper"}, {"bbox_2d": [653, 452, 902, 905], "label": "paper"}]}
+{"image": 5, "boxes": [{"bbox_2d": [131, 114, 256, 526], "label": "paper"}, {"bbox_2d": [128, 540, 253, 898], "label": "paper"}, {"bbox_2d": [258, 111, 503, 903], "label": "paper"}, {"bbox_2d": [530, 134, 922, 888], "label": "paper"}]}
+{"image": 6, "boxes": [{"bbox_2d": [174, 115, 353, 536], "label": "paper"}, {"bbox_2d": [351, 115, 526, 536], "label": "paper"}, {"bbox_2d": [176, 536, 352, 710], "label": "paper"}, {"bbox_2d": [352, 536, 522, 712], "label": "paper"}, {"bbox_2d": [178, 708, 352, 896], "label": "paper"}, {"bbox_2d": [351, 710, 523, 896], "label": "paper"}, {"bbox_2d": [528, 207, 883, 836], "label": "paper"}]}
+{"image": 7, "boxes": [{"bbox_2d": [167, 130, 524, 665], "label": "paper"}, {"bbox_2d": [316, 132, 412, 304], "label": "paper"}, {"bbox_2d": [170, 594, 267, 800], "label": "paper"}, {"bbox_2d": [260, 658, 522, 876], "label": "paper"}, {"bbox_2d": [526, 114, 766, 396], "label": "paper"}, {"bbox_2d": [772, 114, 885, 396], "label": "paper"}, {"bbox_2d": [524, 395, 717, 900], "label": "paper"}, {"bbox_2d": [717, 421, 892, 695], "label": "paper"}, {"bbox_2d": [715, 725, 893, 896], "label": "paper"}]}
+{"image": 8, "boxes": [{"bbox_2d": [81, 118, 968, 898], "label": "paper"}]}
+{"image": 9, "boxes": [{"bbox_2d": [18, 102, 908, 874], "label": "paper"}]}
+{"image": 10, "boxes": [{"bbox_2d": [204, 142, 523, 873], "label": "paper"}, {"bbox_2d": [521, 152, 835, 888], "label": "paper"}]}

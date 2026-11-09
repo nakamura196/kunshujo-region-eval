@@ -2,14 +2,17 @@
 
     python3 -I tools/kunshujo/blind50_server.py strengthening/kunshujo-eval/classify/b1-test300/blind50
 
-127.0.0.1:8766 だけで待ち受ける。ページ（file:// のままでよい）が判定のたびに全件を送ってくるので、
+127.0.0.1:8766 だけで待ち受ける（3 つ目の引数でポート、2 つ目で TSV の名前を変えられる。extra100 では
+`blind50_server.py <dir> extra100_author.tsv 8768`）。ページ（file:// のままでよい）が判定のたびに全件を送ってくるので、
 <dir>/results.json と <dir>/author50_blind.tsv を置き換える。ページを作り直しても、この 2 つは消えない。
 """
 import json, os, sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 D = sys.argv[1]
-J, T = os.path.join(D, 'results.json'), os.path.join(D, 'author50_blind.tsv')
+TSV = sys.argv[2] if len(sys.argv) > 2 else 'author50_blind.tsv'
+PORT = int(sys.argv[3]) if len(sys.argv) > 3 else 8766
+J, T = os.path.join(D, 'results.json'), os.path.join(D, TSV)
 
 
 def write(path, text):
@@ -46,4 +49,4 @@ class H(BaseHTTPRequestHandler):
         pass
 
 
-HTTPServer(('127.0.0.1', 8766), H).serve_forever()
+HTTPServer(('127.0.0.1', PORT), H).serve_forever()

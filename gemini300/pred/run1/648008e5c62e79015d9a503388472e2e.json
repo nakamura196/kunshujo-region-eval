@@ -1,0 +1,1 @@
+{"canvas": "https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif/5e421818-26f3-4b60-b01d-c917afc75c38/canvas/p38", "book_id": "k950", "width": 7688, "height": 5777, "model": "gemini-4-argon-high", "coords": "norm1000-xy", "raw": "{\"image\": 7, \"boxes\": [{\"bbox_2d\": [314, 175, 738, 891], \"label\": \"paper\"}]}", "boxes": [[2414.0, 1011.0, 3259.7, 4136.3, 1.0]]}

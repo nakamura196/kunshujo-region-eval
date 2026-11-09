@@ -1,93 +1,55 @@
 {
-  "frames": "external/frames.json",
-  "size_bounds": [
-    0.06514,
-    0.18505
-  ],
-  "min_side": 10,
-  "conditions": {
-    "b1": {
-      "pred": "external/pred/b1-yolo11s",
-      "conf": 0.31
-    },
-    "b2": {
-      "pred": "external/pred/b2-rtdetr-l",
-      "conf": 0.69
-    },
-    "lc-10": {
-      "pred": "external/pred/lc-10",
-      "conf": 0.34
-    },
-    "gemini": {
-      "pred": "external/pred/gemini",
-      "conf": 0.0,
-      "no_score": true
-    },
-    "b0": {
-      "pred": "external/pred/b0-yolov5x",
-      "conf": 0.52
-    },
-    "c": {
-      "pred": "external/pred/c",
-      "conf": 0.46
-    },
-    "g-pl10": {
-      "pred": "external/pred/g-pl10",
-      "conf": 0.65
-    },
-    "b11x": {
-      "pred": "external/pred/b11x",
-      "conf": 0.41
-    }
+ "frames": "external/frames.json",
+ "size_bounds": [
+  0.06514,
+  0.18505
+ ],
+ "min_side": 10,
+ "conditions": {
+  "c": {
+   "pred": "external/pred/c",
+   "conf": 0.46
   },
-  "pairs": [
-    [
-      "b1",
-      "gemini"
-    ],
-    [
-      "lc-10",
-      "gemini"
-    ],
-    [
-      "b1",
-      "b2"
-    ],
-    [
-      "b0",
-      "gemini"
-    ],
-    [
-      "c",
-      "gemini"
-    ],
-    [
-      "b0",
-      "b1"
-    ],
-    [
-      "g-pl10",
-      "gemini"
-    ],
-    [
-      "g-pl10",
-      "lc-10"
-    ],
-    [
-      "b11x",
-      "gemini"
-    ],
-    [
-      "b11x",
-      "b1"
-    ],
-    [
-      "b11x",
-      "c"
-    ]
+  "b0": {
+   "pred": "external/pred/b0-yolov5x",
+   "conf": 0.52
+  },
+  "gemini": {
+   "pred": "external/pred/gemini",
+   "conf": 0.0,
+   "no_score": true
+  },
+  "gemini-rerun1": {
+   "pred": "external/pred/gemini-rerun1",
+   "conf": 0.0,
+   "no_score": true
+  },
+  "gemini-rerun2": {
+   "pred": "external/pred/gemini-rerun2",
+   "conf": 0.0,
+   "no_score": true
+  }
+ },
+ "pairs": [
+  [
+   "c",
+   "gemini"
   ],
-  "alt_empty": [
-    "https://dl.ndl.go.jp/api/iiif/2586704/canvas/19",
-    "https://dl.ndl.go.jp/api/iiif/2586704/canvas/29"
+  [
+   "b0",
+   "gemini"
+  ],
+  [
+   "b0",
+   "c"
+  ],
+  [
+   "c",
+   "gemini-rerun1"
+  ],
+  [
+   "c",
+   "gemini-rerun2"
   ]
+ ]
 }

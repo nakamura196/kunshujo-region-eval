@@ -1,0 +1,6 @@
+frames 29  median human boxes per frame 3
+{"subset": "all", "frames": 29, "human": 102, "human_per_frame_median": 3, "b0": 0.768, "c": 0.817, "gemini": 0.938, "c-gemini": [-0.121, [-0.242, -0.011]], "b0-gemini": [-0.17, [-0.299, -0.059]]}
+{"subset": "<= 3", "frames": 17, "human": 30, "human_per_frame_median": 1, "b0": 0.764, "c": 0.885, "gemini": 0.818, "c-gemini": [0.067, [-0.11, 0.23]], "b0-gemini": [-0.055, [-0.264, 0.139]]}
+{"subset": "> 3", "frames": 12, "human": 72, "human_per_frame_median": 5.0, "b0": 0.77, "c": 0.784, "gemini": 0.993, "c-gemini": [-0.209, [-0.37, -0.109]], "b0-gemini": [-0.223, [-0.39, -0.111]]}
+{"subset": "group ndl", "frames": 17, "human": 42, "human_per_frame_median": 1, "b0": 0.704, "c": 0.657, "gemini": 0.857, "c-gemini": [-0.2, [-0.449, 0.092]], "b0-gemini": [-0.153, [-0.366, 0.073]]}
+{"subset": "group taito", "frames": 12, "human": 60, "human_per_frame_median": 4.5, "b0": 0.811, "c": 0.914, "gemini": 1.0, "c-gemini": [-0.086, [-0.133, -0.037]], "b0-gemini": [-0.189, [-0.347, -0.085]]}

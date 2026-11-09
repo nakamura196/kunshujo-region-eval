@@ -1,0 +1,10 @@
+{"image": 1, "boxes": [{"bbox_2d": [156, 131, 481, 885], "label": "paper"}, {"bbox_2d": [528, 126, 898, 524], "label": "paper"}, {"bbox_2d": [520, 520, 849, 888], "label": "paper"}]}
+{"image": 2, "boxes": [{"bbox_2d": [142, 131, 516, 892], "label": "paper"}, {"bbox_2d": [515, 125, 885, 879], "label": "paper"}]}
+{"image": 3, "boxes": [{"bbox_2d": [133, 132, 208, 536], "label": "paper"}, {"bbox_2d": [142, 536, 224, 888], "label": "paper"}, {"bbox_2d": [191, 130, 502, 366], "label": "paper"}, {"bbox_2d": [198, 342, 514, 886], "label": "paper"}, {"bbox_2d": [494, 121, 755, 628], "label": "paper"}, {"bbox_2d": [514, 127, 894, 895], "label": "paper"}]}
+{"image": 4, "boxes": [{"bbox_2d": [146, 539, 307, 890], "label": "paper"}, {"bbox_2d": [144, 240, 281, 885], "label": "paper"}, {"bbox_2d": [275, 232, 496, 886], "label": "paper"}, {"bbox_2d": [483, 236, 889, 886], "label": "paper"}]}
+{"image": 5, "boxes": [{"bbox_2d": [94, 544, 378, 891], "label": "paper"}, {"bbox_2d": [248, 156, 606, 873], "label": "paper"}, {"bbox_2d": [577, 140, 919, 882], "label": "paper"}]}
+{"image": 6, "boxes": [{"bbox_2d": [156, 144, 528, 865], "label": "paper"}, {"bbox_2d": [528, 114, 884, 882], "label": "paper"}]}
+{"image": 7, "boxes": [{"bbox_2d": [155, 112, 529, 884], "label": "paper"}, {"bbox_2d": [530, 166, 886, 813], "label": "paper"}]}
+{"image": 8, "boxes": [{"bbox_2d": [176, 116, 550, 286], "label": "paper"}, {"bbox_2d": [186, 298, 314, 594], "label": "paper"}, {"bbox_2d": [180, 594, 314, 880], "label": "paper"}, {"bbox_2d": [550, 118, 908, 276], "label": "paper"}, {"bbox_2d": [313, 268, 907, 876], "label": "paper"}]}
+{"image": 9, "boxes": [{"bbox_2d": [173, 112, 542, 545], "label": "paper"}, {"bbox_2d": [175, 525, 542, 882], "label": "paper"}, {"bbox_2d": [541, 116, 896, 203], "label": "paper"}, {"bbox_2d": [540, 193, 899, 884], "label": "paper"}]}
+{"image": 10, "boxes": [{"bbox_2d": [174, 230, 250, 815], "label": "paper"}, {"bbox_2d": [244, 186, 536, 836], "label": "paper"}, {"bbox_2d": [534, 114, 886, 878], "label": "paper"}]}

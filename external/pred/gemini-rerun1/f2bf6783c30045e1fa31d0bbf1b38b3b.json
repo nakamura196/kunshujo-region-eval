@@ -1,0 +1,1 @@
+{"canvas": "https://dl.ndl.go.jp/api/iiif/2586692/canvas/47", "book_id": "ndl01", "width": 7254, "height": 6678, "model": "gemini-4-argon-high", "coords": "norm1000-xy", "raw": "{\"image\": 4, \"boxes\": [{\"bbox_2d\": [52, 226, 476, 825], \"label\": \"paper\"}]}", "boxes": [[377.2, 1509.2, 3075.7, 4000.1, 1.0]]}

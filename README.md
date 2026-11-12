@@ -1,6 +1,8 @@
 # kunshujo-region-eval
 
-Data and code for the paper “Evaluating automatic detection of pasted items in Japanese scrapbooks against an existing catalogue: public and retrained YOLOv5 versus zero-shot Gemini 4 on the *Kunshūjō*” (Satoru Nakamura, The University of Tokyo; submitted to *Digital Scholarship in the Humanities*).
+Data and code for the paper “Evaluating item detection in Japanese scrapbooks against an existing catalogue: supervised detectors and a zero-shot large multimodal model on the *Kunshūjō*” (Satoru Nakamura, The University of Tokyo; submitted to *Digital Scholarship in the Humanities*).
+
+Terms: this repository says "human boxes" where the paper says catalogue boxes (Kunshūjō) or reference boxes (external scrapbooks), and "machine boxes" for predicted boxes.
 
 論文「貼込帖の紙片の自動検出を既存の目録で確かめる —『捃拾帖』における公開 YOLOv5・学習し直した YOLOv5・Gemini 4 の比較」の評価データとスクリプトです。
 

@@ -26,17 +26,17 @@ The judging page used the following labels (Japanese in the files). `tools/count
 | Label | Meaning | Table 2 |
 |---|---|---|
 | `A 人の枠の中の区画` | inside a catalogue box; sub-category in `a-subclass-author.tsv` | see below |
-| `A2` | one of several separate items that the catalogue merged into one box | Unit mismatch |
-| `見開き` | one page of a booklet spread | Unit mismatch |
-| `A1` | only part of a single sheet | Machine error |
-| `A?` | undecidable | Undecidable |
-| `B 人の枠が無い紙片` | an item with no catalogue box | Unit mismatch |
-| `C 背景` | not an item (background, a decorative border) | Machine error |
-| `D ずれ` | displaced box; all 6 in the YOLOv5-only set were several items merged by the machine into one box | Unit mismatch |
-| `? 決められない` | undecidable | Undecidable |
+| `A2` | one of several separate items that the catalogue merged into one box | Delimitation mismatch |
+| `見開き` | one page of a booklet spread | Delimitation mismatch |
+| `A1` | only part of a single sheet | Detection error |
+| `A?` | indeterminate | Indeterminate |
+| `B 人の枠が無い紙片` | an item with no catalogue box | Delimitation mismatch |
+| `C 背景` | not an item (background, a decorative border) | Detection error |
+| `D ずれ` | displaced box; all 6 (YOLOv5-only set) were found on re-examination to merge several items that the catalogue boxed separately, and are counted as "items merged by the model" (Section 3.3). Under the initial label, the YOLOv5-only set would have 10 detection errors rather than 4 | Delimitation mismatch |
+| `? 決められない` | indeterminate | Indeterminate |
 
 ```
 python3 -I tools/count_unmatched.py
 ```
 
-prints the counts in Table 2 (Gemini: 47 unit mismatch, 2 machine error, 5 undecidable; YOLOv5 only: 22, 4, 5).
+prints the counts in Table 2 (Gemini: 47 delimitation mismatch, 2 detection error, 5 indeterminate; YOLOv5 only: 22, 4, 5).

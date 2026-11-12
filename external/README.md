@@ -47,3 +47,5 @@ The first two commands give the precision, recall, F1 and intervals in Table 3, 
 ## Limitations
 
 The boxes were drawn by the author alone. The author's policy of boxing each piece separately is close to how Gemini boxes. See Section 6 of the paper.
+
+`results/threshold-sweep/` rescores the saved YOLOv5 predictions at thresholds chosen on these 44 frames (an optimistic upper bound; Section 4.3).
